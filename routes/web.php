@@ -36,10 +36,24 @@ Route::get('cats/breeds/{name}', function($name){
 	$breed = App\Breed::with('cats')->whereName($name)->first();
 	return view('cats.index')->with('breed', $breed)->with('cats', $breed->cats);
 });
-Route::get('cats/id', function($id){
+Route::get('cats/{id}', function($id){
 	$cat = App\Cat::find($id);
 	return view('cats.show')->with('cat', $cat);
 });
 // Route::get('cats/{cat}', function(App\Cat $cat){
 // 	return view('cats.show')->with('cat', $cat);
 // });
+
+Route::get('cats/create', function(){
+	return view('cats.create');
+});
+Route::post('cats', function(){
+	$cat = App\Cat::create(Input::all());
+	return redirect('cats/'.$cat->id)->withSuccess('Cat has been created');
+});
+Route::delete('cats/{cat}', function(App\Cat $cat){
+	$cat->delete();
+	return redirect('cats')->withSuccess('Cat has been deleted.');
+});
+
+
